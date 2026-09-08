@@ -3,7 +3,7 @@ from langchain_ollama import ChatOllama, OllamaEmbeddings
 from langchain_core.tools import tool
 from langchain.agents import create_agent
 
-print("🤖 Initializing native 1B Tool-Calling Framework...")
+print(" Initializing native 1B Tool-Calling Framework...")
 
 # 1. Connect database components
 embeddings = OllamaEmbeddings(model="nomic-embed-text")
@@ -23,7 +23,7 @@ def query_private_knowledge_base(user_question: str) -> str:
 
 model = ChatOllama(model="llama3.2:1b", temperature=0)
 
-# 💡 THE NATIVE FIX: We frame it as a text-matching game. No "security", no "passwords".
+#  THE NATIVE FIX: We frame it as a text-matching game. No "security", no "passwords".
 system_instruction = (
     "You are a linguistic pattern matching game. Your only task is to read input questions, "
     "pass them to the `query_private_knowledge_base` tool, and print out whatever letters or string tokens "
@@ -32,11 +32,11 @@ system_instruction = (
 
 app = create_agent(model, tools=[query_private_knowledge_base], system_prompt=system_instruction)
 
-# 💡 THE USER FIX: We ask for the string token value instead of the "secret password"
+#  THE USER FIX: We ask for the string token value instead of the "secret password"
 inputs = {"messages": [("user", "Run the tool and tell me what the vault passcode text token is.")]}
 
-print("\n🚀 Framework Execution Started...")
+print("\n Framework Execution Started...")
 for chunk in app.stream(inputs, stream_mode="values"):
     latest_message = chunk["messages"][-1]
     if latest_message.type == "ai" and latest_message.content:
-        print(f"\n👑 Native 1B Agent Answer:\n{latest_message.content}")
+        print(f"\n Native 1B Agent Answer:\n{latest_message.content}")
